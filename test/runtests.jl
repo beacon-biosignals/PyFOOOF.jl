@@ -27,7 +27,7 @@ ap_params = [20, 2]
 # XXX PyCall's aggressive to NumPy arrays creates problems here
 # so we force it be treated as raw Python code (py-prefix)
 # and NOT be converted to a native Julia array (o-suffix)
-gauss_params = py"[[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]"o
+gauss_params = py"[[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]"
 nlv = 0.1
 set_random_seed(21)
 
