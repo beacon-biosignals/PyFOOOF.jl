@@ -7,15 +7,10 @@ using PyCall
 #####
 
 #####
-##### _init_
+##### init
 #####
 
 const fooof = PyNULL()
-
-function load_python_deps!()
-    copy!(fooof, pyimport("fooof"))
-    return nothing
-end
 
 function __init__()
     # all of this is __init__() so that it plays nice with precompilation
@@ -31,6 +26,25 @@ function __init__()
             @eval $pn = $prop
         end
     end
+    return nothing
+end
+
+"""
+    install_matplotlib(ver="")
+Install matplotlib using the specified version.
+The default version is the latest stable version.
+"""
+function install_matplotlib(version="latest"; verbose=false)
+    verbose && @info "Installing matplotlib"
+    pip = pyimport("pip")
+    flags = split(get(ENV, "PIPFLAGS", ""))
+    packages = ["matplotlib" * (version == "latest" ? "" : "==$version")]
+    if verbose
+        @info "Package requirements:" packages
+        @info "Flags for pip install:" flags
+        @info "matplotlib version:" version
+    end
+    pip.main(["install"; flags; packages])
     return nothing
 end
 

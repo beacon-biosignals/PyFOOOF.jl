@@ -2,7 +2,7 @@
 using PyCall
 pip = pyimport("pip")
 flags = split(get(ENV, "PIPFLAGS", ""))
-ver = get(ENV, "FOOOFVERSION", "")
+ver = get(ENV, "FOOOFVERSION", "1")
 packages = ["""fooof$(isempty(ver) ? "" : "==")$(ver)"""]
 
 @info "Package requirements:" packages
