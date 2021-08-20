@@ -36,8 +36,9 @@ ensuring  that `python` is the same one that PyCall is using. Alternatively,
 you can run this from within Julia:
 ```julia
 julia> using PyCall
-julia> pip = pyimport("pip")
-julia> pip.main(["install", "fooof==version_number"]) # specific version
+julia> pip = pyimport("pip");
+
+julia> pip.main(["install", "fooof==version_number"]); # specific version
 ```
 
 If you do not specify a version via `==version`, then the latest versions will be
@@ -45,8 +46,10 @@ installed. If you wish to upgrade versions, you can use
 `python -m pip install --upgrade fooof` or
 ```julia
 julia> using PyCall
-julia> pip = pyimport("pip")
-julia> pip.main(["install", "--upgrade", "FOOOF"])
+
+julia> pip = pyimport("pip");
+
+julia> pip.main(["install", "--upgrade", "FOOOF"]);
 ```
 
 You can test your setup with `using PyCall; pyimport("fooof")`.
@@ -75,7 +78,7 @@ With PyFOOOF, you can do this from within Julia.
 ```julia
 julia> using PyFOOOF
 
-julia> fm = PyFOOOF.FOOOF()
+julia> fm = PyFOOOF.FOOOF();
 ```
 
 The PyCall infrastructure also means that Python docstrings are available
@@ -182,7 +185,7 @@ PyObject <fooof.objs.fit.FOOOF object at 0x7fea38b5b040>
 Another conversion problem arises in cases where nesting lists and eltypes creates problems.
 For example, the [FOOOF tutorial "Tuning and Troubleshooting"](https://fooof-tools.github.io/fooof/auto_tutorials/plot_07-TroubleShooting.html) includes this statement
 ```python
-gauss_params = [[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]
+>>> gauss_params = [[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]
 ```
 When executed via PyCall, this results in a Julia `Matrix` with eltype `Real`.
 
@@ -197,11 +200,16 @@ julia> py"$([[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]])"
 ```
 This results in an error:
 ```julia
-julia> gen_power_spectrum = fooof.sim.gen.gen_power_spectrum
-julia> f_range = [1, 50]
-julia> ap_params = [20, 2]
-julia> nlv = 0.1
-julia> gauss_params = [[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]
+julia> gen_power_spectrum = fooof.sim.gen.gen_power_spectrum;
+
+julia> f_range = [1, 50];
+
+julia> ap_params = [20, 2];
+
+julia> nlv = 0.1;
+
+julia> gauss_params = [[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]];
+
 julia> freqs, spectrum = gen_power_spectrum(f_range, ap_params, gauss_params, nlv)
 ERROR: PyError ($(Expr(:escape, :(ccall(#= /home/ubuntu/.julia/packages/PyCall/BD546/src/pyfncall.jl:43 =# @pysym(:PyObject_Call), PyPtr, (PyPtr, PyPtr, PyPtr), o, pyargsptr, kw))))) <class 'ValueError'>
 ValueError('operands could not be broadcast together with shapes (99,) (3,) ')
