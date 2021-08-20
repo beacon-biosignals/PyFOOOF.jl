@@ -35,18 +35,18 @@ or `python -m pip install fooof==version_number` for a given `version_number`,
 ensuring  that `python` is the same one that PyCall is using. Alternatively,
 you can run this from within Julia:
 ```julia
-using PyCall
-pip = pyimport("pip")
-pip.main(["install", "fooof==version_number"]) # specific version
+julia> using PyCall
+julia> pip = pyimport("pip")
+julia> pip.main(["install", "fooof==version_number"]) # specific version
 ```
 
 If you do not specify a version via `==version`, then the latest versions will be
 installed. If you wish to upgrade versions, you can use
 `python -m pip install --upgrade fooof` or
 ```julia
-using PyCall
-pip = pyimport("pip")
-pip.main(["install", "--upgrade", "FOOOF"])
+julia> using PyCall
+julia> pip = pyimport("pip")
+julia> pip.main(["install", "--upgrade", "FOOOF"])
 ```
 
 You can test your setup with `using PyCall; pyimport("fooof")`.
@@ -65,17 +65,17 @@ and provide a few accessors.
 For example, in Python you can create a new FOOOF model like this:
 
 ```python
-import fooof
+>>> import fooof
 
-fm = fooof.FOOOF()
+>>> fm = fooof.FOOOF()
 ```
 
 With PyFOOOF, you can do this from within Julia.
 
 ```julia
-using PyFOOOF
+julia> using PyFOOOF
 
-fm = PyFOOOF.FOOOF()
+julia> fm = PyFOOOF.FOOOF()
 ```
 
 The PyCall infrastructure also means that Python docstrings are available
