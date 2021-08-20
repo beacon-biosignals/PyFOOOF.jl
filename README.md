@@ -29,7 +29,7 @@ Note that FOOOF uses [`matplotlib`](https://matplotlib.org/) for plotting, but d
 If you wish to take advantage of this functionality, the non-exported `install_matplotlib` function will install `matplotlib`, using the same environment variables as the main installation.
 The Julia package [`PyPlot`](https://github.com/JuliaPy/PyPlot.jl), which provides a Julia interface to `matplotlib`, is also useful for manipulating the rendered plots.
 
-FOOOF-Python can also be installed manually ahead of time.
+FOOOF can also be installed manually ahead of time.
 From the shell, use `python -m pip install fooof` for the latest stable release
 or `python -m pip install fooof==version_number` for a given `version_number`,
 ensuring  that `python` is the same one that PyCall is using. Alternatively,
