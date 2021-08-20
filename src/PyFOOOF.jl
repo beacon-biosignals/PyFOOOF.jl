@@ -17,7 +17,7 @@ function __init__()
     # see https://github.com/JuliaPy/PyCall.jl/#using-pycall-from-julia-modules
     copy!(fooof, pyimport("fooof"))
     # don't eval into the module while precompiling; this breaks precompilation
-    # of downstream modules (see #4)
+    # of downstream modules
     if ccall(:jl_generating_output, Cint, ()) == 0
         # delegate everything else to fooof
         for pn in propertynames(fooof)
