@@ -25,7 +25,7 @@ FOOOF 1.x release available on [PyPI](https://pypi.org/project/FOOOF/), but this
 be changed via the `ENV["FOOOFVERSION"] = version_number` for your preferred
 `version_number`.
 
-Note that FOOOF-Python uses [`matplotlib`](https://matplotlib.org/) for plotting, but does not install it automatically as a dependency.
+Note that FOOOF uses [`matplotlib`](https://matplotlib.org/) for plotting, but does not install it automatically as a dependency.
 If you wish to take advantage of this functionality, the non-exported `install_matplotlib` function will install `matplotlib`, using the same environment variables as the main installation.
 The Julia package [`PyPlot`](https://github.com/JuliaPy/PyPlot.jl), which provides a Julia interface to `matplotlib`, is also useful for manipulating the rendered plots.
 
