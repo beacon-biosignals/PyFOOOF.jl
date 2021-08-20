@@ -29,7 +29,7 @@ Note that FOOOF-Python uses [`matplotlib`](https://matplotlib.org/) for plotting
 If you wish to take advantage of this functionality, the non-exported `install_matplotlib` function will install `matplotlib`, using the same environment variables as the main installation.
 The Julia package [`PyPlot`](https://github.com/JuliaPy/PyPlot.jl), which provides a Julia interface to `matplotlib`, is also useful for manipulating the rendered plots.
 
-FOOOF-Python can also be installed them manually ahead of time.
+FOOOF-Python can also be installed manually ahead of time.
 From the shell, use `python -m pip install fooof` for the latest stable release
 or `python -m pip install fooof==version_number` for a given `version_number`,
 ensuring  that `python` is the same one that PyCall is using. Alternatively,
@@ -208,7 +208,7 @@ ValueError('operands could not be broadcast together with shapes (99,) (3,) ')
 ...
 ```
 
-When that line is executed in Python and then roundtripped through Julia, PyCall converts the Python return value to a `Matrix`, which works in the subsequent function call:
+When the statement is executed in Python (`py"[]"`) and then roundtripped through Julia, PyCall converts the Python return value to a `Matrix`, which works in the subsequent function call:
 ```julia
 julia> gauss_params = py"[[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]"
 3×3 Matrix{Real}:
@@ -219,7 +219,7 @@ julia> freqs, spectrum = gen_power_spectrum(f_range, ap_params, gauss_params, nl
 ([1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5  …  45.5, 46.0, 46.5, 47.0, 47.5, 48.0, 48.5, 49.0, 49.5, 50.0], [9.112713501760112e19, 6.707288550822094e19, 3.4304395055235047e19, 1.6048034860916263e19, 1.3121468876633584e19, 9.23648446980319e18, 7.068034503219047e18, 7.474675398285033e18, 5.682794734823231e18, 6.002884162025267e18  …  5.494028369147603e16, 5.044411758605143e16, 4.528833513498138e16, 4.080554951080287e16, 4.064069219484658e16, 3.9731296024126536e16, 3.21719026879766e16, 4.828351597256686e16, 4.441592192173848e16, 4.129641670786365e16])
 ```
 
-However, naively using in Julia a true 2d array (`Matrix`) also results in error:
+However, naively using a true 2d array (`Matrix`) in Julia also results in error:
 ```julia
 julia> gauss_params = [10 1.0 2.5; 20 0.8 2; 32 0.6 1]
 3×3 Matrix{Float64}:
