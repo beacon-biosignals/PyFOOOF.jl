@@ -3,10 +3,6 @@ module PyFOOOF
 using PyCall
 
 #####
-##### Exports
-#####
-
-#####
 ##### init
 #####
 
@@ -28,25 +24,5 @@ function __init__()
     end
     return nothing
 end
-
-"""
-    install_matplotlib(ver="")
-Install matplotlib using the specified version.
-The default version is the latest stable version.
-"""
-function install_matplotlib(version="latest"; verbose=false)
-    verbose && @info "Installing matplotlib"
-    pip = pyimport("pip")
-    flags = split(get(ENV, "PIPFLAGS", ""))
-    packages = ["matplotlib" * (version == "latest" ? "" : "==$version")]
-    if verbose
-        @info "Package requirements:" packages
-        @info "Flags for pip install:" flags
-        @info "matplotlib version:" version
-    end
-    pip.main(["install"; flags; packages])
-    return nothing
-end
-
 
 end #module

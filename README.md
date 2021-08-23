@@ -26,8 +26,7 @@ be changed via the `ENV["FOOOFVERSION"] = version_number` for your preferred
 `version_number`.
 
 Note that FOOOF uses [`matplotlib`](https://matplotlib.org/) for plotting, but does not install it automatically as a dependency.
-If you wish to take advantage of this functionality, the non-exported `install_matplotlib` function will install `matplotlib`, using the same environment variables as the main installation.
-The Julia package [`PyPlot`](https://github.com/JuliaPy/PyPlot.jl), which provides a Julia interface to `matplotlib`, is also useful for manipulating the rendered plots.
+The Julia package [`PyPlot`](https://github.com/JuliaPy/PyPlot.jl), which provides a Julia interface to `matplotlib`, is useful for installing `matplotlib` and manipulating the rendered plots.
 
 FOOOF can also be installed manually ahead of time.
 From the shell, use `python -m pip install fooof` for the latest stable release
@@ -172,6 +171,7 @@ ValueError('The truth value of an array with more than one element is ambiguous.
     self._reset_internal_settings()
   File "/home/ubuntu/anaconda3/lib/python3.8/site-packages/fooof/objs/fit.py", line 236, in _reset_internal_settings
     if self.peak_width_limits:
+...
 ```
 (The particular problem arises here because FOOOF is depending on the Python's automatic conversion of `None` and empty lists to `False` and non-empty lists to `True`.)
 
