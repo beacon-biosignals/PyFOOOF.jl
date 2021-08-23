@@ -235,8 +235,8 @@ julia> gauss_params = [10 1.0 2.5; 20 0.8 2; 32 0.6 1]
  20.0  0.8  2.0
  32.0  0.6  1.0
 julia> freqs, spectrum = gen_power_spectrum(f_range, ap_params, gauss_params, nlv)
-\ERROR: PyError ($(Expr(:escape, :(ccall(#= /home/ubuntu/.julia/packages/PyCall/BD546/src/pyfncall.jl:43 =# @pysym(:PyObject_Call), PyPtr, (PyPtr, PyPtr, PyPtr), o, pyargsptr, kw))))) <class 'ValueError'>
-ValueError('operands could not be broadcast together with shapes (99,) (3,) '
+ERROR: PyError ($(Expr(:escape, :(ccall(#= /home/ubuntu/.julia/packages/PyCall/BD546/src/pyfncall.jl:43 =# @pysym(:PyObject_Call), PyPtr, (PyPtr, PyPtr, PyPtr), o, pyargsptr, kw))))) <class 'ValueError'>
+ValueError('operands could not be broadcast together with shapes (99,) (3,) ')
 ...
 ```
 
