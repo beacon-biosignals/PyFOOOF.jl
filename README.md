@@ -132,7 +132,7 @@ For example, the [FOOOF tutorial "Tuning and Troubleshooting"](https://fooof-too
 ```python
 >>> gauss_params = [[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]
 ```
-When executed via PyCall, this results in a Julia `Vector{Vector{Float64}}`.
+When executed via PythonCall, this results in a Julia `Vector{Vector{Float64}}`.
 
 ```julia
 julia> Py([[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]])
