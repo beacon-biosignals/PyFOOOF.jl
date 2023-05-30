@@ -1,6 +1,10 @@
-using PyCall
+using Aqua
 using PyFOOOF
 using Test
+
+@testset "Aqua" begin
+    Aqua.test_all(PyFOOOF; ambiguities=false)
+end
 
 # test that this works
 fooof = PyFOOOF.fooof
@@ -24,19 +28,23 @@ set_random_seed =  pyimport("fooof.sim.utils").set_random_seed
 
 f_range = [1, 50]
 ap_params = [20, 2]
-# XXX PyCall's aggressive conversion to NumPy arrays creates problems here
-# so we force it be treated as raw Python code (py-prefix)
-# and NOT be converted to a native Julia array (o-suffix)
-gauss_params = py"[[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]"
+# FOOOF requires a list of lists for this, so we need to guarantee
+# that Vector{<:Number} is not coverted to NumPy arrays
+# NB: broadcasting so that we don't have a list of Vector{<:Number}, which
+# would become a a list of NumPy arrays
+gauss_params = pylist.([[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]])
 nlv = 0.1
 set_random_seed(21)
 
 freqs, spectrum = gen_power_spectrum(f_range, ap_params, gauss_params, nlv)
 
-fm = FOOOF(; peak_width_limits=py"[1, 8]"o, max_n_peaks=6, min_peak_height=0.4)
+fm = FOOOF(; peak_width_limits=[1, 8], max_n_peaks=6, min_peak_height=0.4)
 fm.fit(freqs, spectrum)
 
-ground_truth = float.(py"$(gauss_params)")
-actual_estimates = fm.gaussian_params_
+# not worth adding a compat dependency just to get stack() for one test,
+# ew this is messy without stack()
+ground_truth = mapreduce(x -> pyconvert(Vector{Float64}, x)',
+                         vcat, gauss_params; init=Matrix{Float64}(undef, 0, 3))
+actual_estimates = pyconvert(Matrix, fm.gaussian_params_)
 expected_estimates = [9.82  0.91  2.43; 20.03  0.82  1.94; 31.85  0.57  1.11]
 @test actual_estimates ≈ expected_estimates atol=0.01
