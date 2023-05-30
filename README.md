@@ -20,7 +20,7 @@ The Julia package [`PythonPlot`](https://github.com/JuliaPy/PythonPlot.jl), whic
 
 ## Usage
 
-In the same philosophy as Pythonall, this allows for the transparent use of
+In the same philosophy as PythonCall, this allows for the transparent use of
 FOOOF from within Julia.
 The major things the package does are wrap the installation of FOOOF, load all
 the FOOOF functionality into the module namespace, and provide a few accessors.
