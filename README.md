@@ -10,57 +10,20 @@ Julia interface to [FOOOF](https://github.com/fooof-tools/fooof)
 
 
 ## Installation
-This package uses [`PyCall`](https://github.com/JuliaPy/PyCall.jl/) to make
+This package uses [`PythonCall`](https://cjdoris.github.io/PythonCall.jl) to make
 [FOOOF](https://fooof-tools.github.io/fooof/index.html) available from within Julia.
-Unsurprisingly, FOOOF and its dependencies need to be installed in order for this to work
-and PyFOOOF will attempt to install when the package is built.
-
-By default, this installation happens in the "global" path for the Python used
-by PyCall. If you're using PyCall via its hidden Miniconda install, your own
-Anaconda environment, or a Python virtual environment, this is what you want.
-(The "global" path is sandboxed to the Conda/virtual environment.) If you are
-however using system Python, then you should set `ENV["PIPFLAGS"] = "--user"`
-before `add`ing / `build`ing the package. By default, PyFOOOF will use the latest
-FOOOF 1.x release available on [PyPI](https://pypi.org/project/FOOOF/), but this can also
-be changed via the `ENV["FOOOFVERSION"] = version_number` for your preferred
-`version_number`.
+Additional control over Python and FOOOF versions can be exercised by using
+[`CondaPkg`](https://github.com/cjdoris/CondaPkg.jl) to control the local versions.
 
 Note that FOOOF uses [`matplotlib`](https://matplotlib.org/) for plotting, but does not install it automatically as a dependency.
-The Julia package [`PyPlot`](https://github.com/JuliaPy/PyPlot.jl), which provides a Julia interface to `matplotlib`, is useful for installing `matplotlib` and manipulating the rendered plots.
-
-FOOOF can also be installed manually ahead of time.
-From the shell, use `python -m pip install fooof` for the latest stable release
-or `python -m pip install fooof==version_number` for a given `version_number`,
-ensuring  that `python` is the same one that PyCall is using. Alternatively,
-you can run this from within Julia:
-```julia
-julia> using PyCall
-julia> pip = pyimport("pip");
-
-julia> pip.main(["install", "fooof==version_number"]); # specific version
-```
-
-If you do not specify a version via `==version`, then the latest versions will be
-installed. If you wish to upgrade versions, you can use
-`python -m pip install --upgrade fooof` or
-```julia
-julia> using PyCall
-
-julia> pip = pyimport("pip");
-
-julia> pip.main(["install", "--upgrade", "FOOOF"]);
-```
-
-You can test your setup with `using PyCall; pyimport("fooof")`.
+The Julia package [`PythonPlot`](https://github.com/JuliaPy/PythonPlot.jl), which provides a Julia interface to `matplotlib`, is useful for installing `matplotlib` and manipulating the rendered plots.
 
 ## Usage
 
-In the same philosophy as PyCall, this allows for the transparent use of
+In the same philosophy as Pythonall, this allows for the transparent use of
 FOOOF from within Julia.
-The major things the package does are wrap the installation of FOOOF in the
-package `build` step, load all the FOOOF functionality into the module namespace,
-and provide a few accessors.
-
+The major things the package does are wrap the installation of FOOOF, load all
+the FOOOF functionality into the module namespace, and provide a few accessors.
 
 ### Exposing FOOOF in Julia
 
@@ -80,125 +43,109 @@ julia> using PyFOOOF
 julia> fm = PyFOOOF.FOOOF();
 ```
 
-The PyCall infrastructure also means that Python docstrings are available
+The PythonCall infrastructure also means that Python docstrings are available
 in Julia:
+
+<details><summary>Example</summary>
 
 ```julia
 help?> PyFOOOF.FOOOF
-Model a physiological power spectrum as a combination of aperiodic and periodic components.
+  Python class FOOOF.
 
-    WARNING: FOOOF expects frequency and power values in linear space.
+  Model a physiological power spectrum as a combination of aperiodic and periodic components.
 
-    Passing in logged frequencies and/or power spectra is not detected,
-    and will silently produce incorrect results.
+  WARNING: FOOOF expects frequency and power values in linear space.
 
-    Parameters
-    ----------
-    peak_width_limits : tuple of (float, float), optional, default: (0.5, 12.0)
-        Limits on possible peak width, in Hz, as (lower_bound, upper_bound).
-    max_n_peaks : int, optional, default: inf
-        Maximum number of peaks to fit.
-    min_peak_height : float, optional, default: 0
-        Absolute threshold for detecting peaks, in units of the input data.
-    peak_threshold : float, optional, default: 2.0
-        Relative threshold for detecting peaks, in units of standard deviation of the input data.
-    aperiodic_mode : {'fixed', 'knee'}
-        Which approach to take for fitting the aperiodic component.
-    verbose : bool, optional, default: True
-        Verbosity mode. If True, prints out warnings and general status updates.
+  Passing in logged frequencies and/or power spectra is not detected,
+  and will silently produce incorrect results.
 
-    Attributes
-    ----------
-    freqs : 1d array
-        Frequency values for the power spectrum.
-    power_spectrum : 1d array
-        Power values, stored internally in log10 scale.
-    freq_range : list of [float, float]
-        Frequency range of the power spectrum, as [lowest_freq, highest_freq].
-    freq_res : float
-        Frequency resolution of the power spectrum.
-    fooofed_spectrum_ : 1d array
-        The full model fit of the power spectrum, in log10 scale.
-    aperiodic_params_ : 1d array
-        Parameters that define the aperiodic fit. As [Offset, (Knee), Exponent].
-        The knee parameter is only included if aperiodic component is fit with a knee.
-    peak_params_ : 2d array
-        Fitted parameter values for the peaks. Each row is a peak, as [CF, PW, BW].
-    gaussian_params_ : 2d array
-        Parameters that define the gaussian fit(s).
-        Each row is a gaussian, as [mean, height, standard deviation].
-    r_squared_ : float
-        R-squared of the fit between the input power spectrum and the full model fit.
-    error_ : float
-        Error of the full model fit.
-    n_peaks_ : int
-        The number of peaks fit in the model.
-    has_data : bool
-        Whether data is loaded to the object.
-    has_model : bool
-        Whether model results are available in the object.
+  Parameters
+  ----------
+  peak_width_limits : tuple of (float, float), optional, default: (0.5, 12.0)
+      Limits on possible peak width, in Hz, as (lower_bound, upper_bound).
+  max_n_peaks : int, optional, default: inf
+      Maximum number of peaks to fit.
+  min_peak_height : float, optional, default: 0
+      Absolute threshold for detecting peaks, in units of the input data.
+  peak_threshold : float, optional, default: 2.0
+      Relative threshold for detecting peaks, in units of standard deviation of the input data.
+  aperiodic_mode : {'fixed', 'knee'}
+      Which approach to take for fitting the aperiodic component.
+  verbose : bool, optional, default: True
+      Verbosity mode. If True, prints out warnings and general status updates.
 
-    Notes
-    -----
-    - Commonly used abbreviations used in this module include:
-      CF: center frequency, PW: power, BW: Bandwidth, AP: aperiodic
-    - Input power spectra must be provided in linear scale.
-      Internally they are stored in log10 scale, as this is what the model operates upon.
-    - Input power spectra should be smooth, as overly noisy power spectra may lead to bad fits.
-      For example, raw FFT inputs are not appropriate. Where possible and appropriate, use
-      longer time segments for power spectrum calculation to get smoother power spectra,
-      as this will give better model fits.
-    - The gaussian params are those that define the gaussian of the fit, where as the peak
-      params are a modified version, in which the CF of the peak is the mean of the gaussian,
-      the PW of the peak is the height of the gaussian over and above the aperiodic component,
-      and the BW of the peak, is 2*std of the gaussian (as 'two sided' bandwidth).
+  Attributes
+  ----------
+  freqs : 1d array
+      Frequency values for the power spectrum.
+  power_spectrum : 1d array
+      Power values, stored internally in log10 scale.
+  freq_range : list of [float, float]
+      Frequency range of the power spectrum, as [lowest_freq, highest_freq].
+  freq_res : float
+      Frequency resolution of the power spectrum.
+  fooofed_spectrum_ : 1d array
+      The full model fit of the power spectrum, in log10 scale.
+  aperiodic_params_ : 1d array
+      Parameters that define the aperiodic fit. As [Offset, (Knee), Exponent].
+      The knee parameter is only included if aperiodic component is fit with a knee.
+  peak_params_ : 2d array
+      Fitted parameter values for the peaks. Each row is a peak, as [CF, PW, BW].
+  gaussian_params_ : 2d array
+      Parameters that define the gaussian fit(s).
+      Each row is a gaussian, as [mean, height, standard deviation].
+  r_squared_ : float
+      R-squared of the fit between the input power spectrum and the full model fit.
+  error_ : float
+      Error of the full model fit.
+  n_peaks_ : int
+      The number of peaks fit in the model.
+  has_data : bool
+      Whether data is loaded to the object.
+  has_model : bool
+      Whether model results are available in the object.
+
+  Notes
+  -----
+  - Commonly used abbreviations used in this module include:
+    CF: center frequency, PW: power, BW: Bandwidth, AP: aperiodic
+  - Input power spectra must be provided in linear scale.
+    Internally they are stored in log10 scale, as this is what the model operates upon.
+  - Input power spectra should be smooth, as overly noisy power spectra may lead to bad fits.
+    For example, raw FFT inputs are not appropriate. Where possible and appropriate, use
+    longer time segments for power spectrum calculation to get smoother power spectra,
+    as this will give better model fits.
+  - The gaussian params are those that define the gaussian of the fit, where as the peak
+    params are a modified version, in which the CF of the peak is the mean of the gaussian,
+    the PW of the peak is the height of the gaussian over and above the aperiodic component,
+    and the BW of the peak, is 2*std of the gaussian (as 'two sided' bandwidth).
 ```
+
+</details>
 
 ### Helping with type conversions
 
-PyCall can be rather aggressive in converting standard types, such as
-dictionaries, to their native Julia equivalents, but this can create problems
-due to differences in the way inheritance is traditionally used between
-languages.
-In particular, Julia arrays are converted to NumPy arrays and *not* Python lists.
-This conversion creates problems where FOOOF expects a list and not an array, for example in the `freq_range` keyword argument:
-
-```julia
-julia> fm = FOOOF(; peak_width_limits=[1,8])
-ERROR: PyError ($(Expr(:escape, :(ccall(#= /home/ubuntu/.julia/packages/PyCall/BD546/src/pyfncall.jl:43 =# @pysym(:PyObject_Call), PyPtr, (PyPtr, PyPtr, PyPtr), o, pyargsptr, kw))))) <class 'ValueError'>
-ValueError('The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()')
-  File "/home/ubuntu/anaconda3/lib/python3.8/site-packages/fooof/objs/fit.py", line 193, in __init__
-    self._reset_internal_settings()
-  File "/home/ubuntu/anaconda3/lib/python3.8/site-packages/fooof/objs/fit.py", line 236, in _reset_internal_settings
-    if self.peak_width_limits:
-...
-```
-(The particular problem arises here because FOOOF is depending on the Python's automatic conversion of `None` and empty lists to `False` and non-empty lists to `True`.)
-
-Note that simply wrapping the array as a Python literal (`py"[1,8]"`) does not suffice because this is converted to a Julia vector and thus then to a NumPy array when passed back to Python. Instead, we have to force PyCall to not convert the resulting Python object with the `o` suffix:
-
-```julia
-julia> fm = FOOOF(; peak_width_limits=py"[1,8]"o)
-PyObject <fooof.objs.fit.FOOOF object at 0x7fea38b5b040>
-```
-
-Another conversion problem arises in cases where nesting lists and eltypes creates problems.
+FOOOF can be quite sensitive to the distinction between Python lists and NumPy
+arrays, which can be problematic when relying on fully automatic conversions,
+especially of nested lists.
 For example, the [FOOOF tutorial "Tuning and Troubleshooting"](https://fooof-tools.github.io/fooof/auto_tutorials/plot_07-TroubleShooting.html) includes this statement
 ```python
 >>> gauss_params = [[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]
 ```
-When executed via PyCall, this results in a Julia `Matrix` with eltype `Real`.
+When executed via PyCall, this results in a Julia `Vector{Vector{Float64}}`.
 
 ```julia
-julia> py"$([[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]])"
-PyObject [array([10. ,  1. ,  2.5]), array([20. ,  0.8,  2. ]), array([32. ,  0.6,  1. ])]
-julia> py"$([[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]])"
+julia> Py([[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]])
+Python:
+Julia:
 3-element Vector{Vector{Float64}}:
  [10.0, 1.0, 2.5]
  [20.0, 0.8, 2.0]
  [32.0, 0.6, 1.0]
 ```
+
 This results in an error:
+
 ```julia
 julia> gen_power_spectrum = fooof.sim.gen.gen_power_spectrum;
 
@@ -211,47 +158,55 @@ julia> nlv = 0.1;
 julia> gauss_params = [[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]];
 
 julia> freqs, spectrum = gen_power_spectrum(f_range, ap_params, gauss_params, nlv)
-ERROR: PyError ($(Expr(:escape, :(ccall(#= /home/ubuntu/.julia/packages/PyCall/BD546/src/pyfncall.jl:43 =# @pysym(:PyObject_Call), PyPtr, (PyPtr, PyPtr, PyPtr), o, pyargsptr, kw))))) <class 'ValueError'>
-ValueError('operands could not be broadcast together with shapes (99,) (3,) ')
+ERROR: Python: ValueError: operands could not be broadcast together with shapes (99,) (3,)
+Python stacktrace:
+ [1] gaussian_function
+   @ fooof.core.funcs ~/PyFOOOF.jl/.CondaPkg/env/lib/python3.11/site-packages/fooof/core/funcs.py:39
+ [2] gen_periodic
+   @ fooof.sim.gen ~/PyFOOOF.jl/.CondaPkg/env/lib/python3.11/site-packages/fooof/sim/gen.py:342
+ [3] gen_power_vals
+   @ fooof.sim.gen ~/PyFOOOF.jl/.CondaPkg/env/lib/python3.11/site-packages/fooof/sim/gen.py:401
+ [4] gen_power_spectrum
+   @ fooof.sim.gen ~/PyFOOOF.jl/.CondaPkg/env/lib/python3.11/site-packages/fooof/sim/gen.py:147
+Stacktrace:
 ...
 ```
 
-When the statement is executed in Python (`py"[]"`) and then roundtripped through Julia, PyCall converts the Python return value to a `Matrix`, which works in the subsequent function call:
+The workaround is to force `gauss_params` to be interpreted as as a list of lists, which also preserves
+the individual elements' types (int vs float):
+
 ```julia
-julia> gauss_params = py"[[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]]"
-3×3 Matrix{Real}:
- 10  1.0  2.5
- 20  0.8  2
- 32  0.6  1
+julia> gauss_params = pylist.([[10, 1.0, 2.5], [20, 0.8, 2], [32, 0.6, 1]])
+3-element Vector{Py}:
+ [10.0, 1.0, 2.5]
+ [20.0, 0.8, 2.0]
+ [32.0, 0.6, 1.0]
+
 julia> freqs, spectrum = gen_power_spectrum(f_range, ap_params, gauss_params, nlv)
-([1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5  …  45.5, 46.0, 46.5, 47.0, 47.5, 48.0, 48.5, 49.0, 49.5, 50.0], [9.112713501760112e19, 6.707288550822094e19, 3.4304395055235047e19, 1.6048034860916263e19, 1.3121468876633584e19, 9.23648446980319e18, 7.068034503219047e18, 7.474675398285033e18, 5.682794734823231e18, 6.002884162025267e18  …  5.494028369147603e16, 5.044411758605143e16, 4.528833513498138e16, 4.080554951080287e16, 4.064069219484658e16, 3.9731296024126536e16, 3.21719026879766e16, 4.828351597256686e16, 4.441592192173848e16, 4.129641670786365e16])
-```
-
-However, naively using a true 2d array (`Matrix`) in Julia also results in error:
-```julia
-julia> gauss_params = [10 1.0 2.5; 20 0.8 2; 32 0.6 1]
-3×3 Matrix{Float64}:
- 10.0  1.0  2.5
- 20.0  0.8  2.0
- 32.0  0.6  1.0
-julia> freqs, spectrum = gen_power_spectrum(f_range, ap_params, gauss_params, nlv)
-ERROR: PyError ($(Expr(:escape, :(ccall(#= /home/ubuntu/.julia/packages/PyCall/BD546/src/pyfncall.jl:43 =# @pysym(:PyObject_Call), PyPtr, (PyPtr, PyPtr, PyPtr), o, pyargsptr, kw))))) <class 'ValueError'>
-ValueError('operands could not be broadcast together with shapes (99,) (3,) ')
-...
-```
-
-The problem is in the eltype: we need to force it to `Real` so that the integers are preserved as integers when passed to Python:
-
-```julia
-julia> gauss_params = Real[10 1.0 2.5; 20 0.8 2; 32 0.6 1]
-3×3 Matrix{Real}:
- 10  1.0  2.5
- 20  0.8  2
- 32  0.6  1
+Python:
+(array([ 1. ,  1.5,  2. ,  2.5,  3. ,  3.5,  4. ,  4.5,  5. ,  5.5,  6. ,
+        6.5,  7. ,  7.5,  8. ,  8.5,  9. ,  9.5, 10. , 10.5, 11. , 11.5,
+       12. , 12.5, 13. , 13.5, 14. , 14.5, 15. , 15.5, 16. , 16.5, 17. ,
+       17.5, 18. , 18.5, 19. , 19.5, 20. , 20.5, 21. , 21.5, 22. , 22.5,
+       23. , 23.5, 24. , 24.5, 25. , 25.5, 26. , 26.5, 27. , 27.5, 28. ,
+       28.5, 29. , 29.5, 30. , 30.5, 31. , 31.5, 32. , 32.5, 33. , 33.5,
+       34. , 34.5, 35. , 35.5, 36. , 36.5, 37. , 37.5, 38. , 38.5, 39. ,
+       39.5, 40. , 40.5, 41. , 41.5, 42. , 42.5, 43. , 43.5, 44. , 44.5,
+                             ... 17 more lines ...
+       1.08500258e+17, 8.96225267e+16, 7.27460728e+16, 8.01572652e+16,
+       5.28615329e+16, 5.02376587e+16, 7.65356201e+16, 1.27226878e+17,
+       1.04460011e+17, 1.14497405e+17, 7.12727925e+16, 5.40055512e+16,
+       7.60772143e+16, 4.41011048e+16, 2.93448991e+16, 6.10439802e+16,
+       6.86158349e+16, 6.21644140e+16, 7.38110102e+16, 6.02312564e+16,
+       5.34817797e+16, 3.78961836e+16, 4.58707098e+16, 3.52330831e+16,
+       4.15835216e+16, 6.86889336e+16, 4.55552304e+16, 4.63646306e+16,
+       3.54988480e+16, 7.43140499e+16, 2.53356592e+16]))
 ```
 
 If other automatic type conversions are found to be problematic or there are
-particular FOOOF functions that don't play nice via the default PyCall mechanisms,
+particular FOOOF functions that don't play nice via the default PythonCall mechanisms,
 then issues and pull requests are welcome.
 
-Many of these problematic conversions can be fixed with relatively straightforward (and backward compatible) changes to FOOOF; we are in the process of opening PRs for this purpose.
+Many of these problematic conversions can be fixed with relatively straightforward (
+and backward compatible) changes to FOOOF. In other words, upstream PRs are
+also welcome.
