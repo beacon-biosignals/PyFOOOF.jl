@@ -3,7 +3,7 @@ Julia interface to [FOOOF](https://github.com/fooof-tools/fooof)
 
 [![Build Status][build-img]][build-url] [![CodeCov][codecov-img]][codecov-url]
 
-[build-img]: https://github.com/beacon-biosignals/PyFOOOF.jl/workflows/CI/badge.svg
+[build-img]: https://github.com/beacon-biosignals/PyFOOOF.jl/actions/workflows/CI.yml/badge.svg
 [build-url]: https://github.com/beacon-biosignals/PyFOOOF.jl/actions
 [codecov-img]: https://codecov.io/github/beacon-biosignals/PyFOOOF.jl/badge.svg?branch=main
 [codecov-url]: https://codecov.io/github/beacon-biosignals/PyFOOOF.jl?branch=main
