@@ -1,7 +1,7 @@
 name = "PyFOOOF"
 uuid = "bb993ee8-2a51-46a1-a315-55ff424041b4"
 authors = ["Beacon Biosignals, Inc."]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
@@ -11,7 +11,7 @@ Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 Aqua = "0.5, 0.6"
 PythonCall = "0.9"
 Reexport = "1"
-julia = "1.6"
+julia = "1.10"
 
 [extras]
 Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
