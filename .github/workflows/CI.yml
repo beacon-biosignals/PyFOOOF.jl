@@ -23,7 +23,7 @@ jobs:
         version:
           - '1'
           - 'min'
-          - 'nightly'
+          - 'pre'
         os:
           - ubuntu-latest
           - macOS-latest
@@ -41,4 +41,3 @@ jobs:
         with:
           files: lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
-          
