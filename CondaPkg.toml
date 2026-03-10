@@ -1,9 +1,9 @@
-channels = ["anaconda", "conda-forge"]
+# CondaPkg uses mamba by default, and it's recommended to not have the anaconda channel enabled
+# because it leads to dependency hell
+channels = ["conda-forge"]
 [deps]
 # Conda package names and versions
 python = ">=3.5,<4"
-
-# CondaPkg uses mamba by default
 fooof = ">=1.0, <2"
 
 [pip.deps]
