@@ -8,9 +8,10 @@ PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 
 [compat]
-Aqua = "0.5, 0.6, 0.8"
+Aqua = "0.8"
 PythonCall = "0.9"
 Reexport = "1"
+Test = "1"
 julia = "1.10"
 
 [extras]
